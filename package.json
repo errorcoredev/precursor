@@ -1,0 +1,36 @@
+{
+  "name": "errorcore-runtime-evidence",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint . && prettier --check .",
+    "format": "prettier --write .",
+    "test": "npm run build && vitest run",
+    "example": "npm run build && node dist/examples/investigate.js",
+    "benchmark": "npm run build && node dist/benchmarks/run.js"
+  },
+  "dependencies": {
+    "stream-json": "3.8.0"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "eslint": "10.14.0",
+    "node": "24.22.2",
+    "prettier": "3.9.10",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.72.1",
+    "vitest": "5.1.0"
+  }
+}

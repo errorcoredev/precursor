@@ -1,0 +1,71 @@
+{
+  "$schema": "errorcore.example/v1",
+  "operations": [
+    {
+      "id": "request-1",
+      "label": "HTTP handler",
+      "correlationId": "trace-9",
+      "snapshot": { "route": "/orders", "received": null }
+    },
+    {
+      "id": "load-2",
+      "label": "load order",
+      "correlationId": "trace-9",
+      "snapshot": {
+        "order": {
+          "id": 17,
+          "items": ["book", "pen"],
+          "customer": {
+            "$availability": "redacted",
+            "reason": "upstream policy"
+          }
+        },
+        "query": "select order"
+      }
+    },
+    {
+      "id": "write-3",
+      "label": "persist order",
+      "snapshot": {
+        "attempt": 2,
+        "exception": { "message": "write failed", "code": "E_WRITE" },
+        "partial": {
+          "$availability": "truncated",
+          "reason": "source length limit",
+          "value": [1, 2]
+        }
+      },
+      "status": "failed"
+    }
+  ],
+  "relationships": [
+    { "from": "request-1", "to": "load-2", "type": "call" },
+    { "from": "load-2", "to": "write-3", "type": "await" },
+    { "from": "request-1", "to": "write-3", "type": "trigger" }
+  ],
+  "failures": [
+    {
+      "operationId": "write-3",
+      "message": "recorded exception at persist",
+      "primary": true
+    }
+  ],
+  "runtime": {
+    "missing": {
+      "$availability": "not_captured",
+      "reason": "instrumentation disabled"
+    },
+    "uncertain": { "$availability": "unknown" },
+    "reference": {
+      "$availability": "unresolved",
+      "$runtimeType": "reference:object-4"
+    },
+    "undefinedValue": {
+      "$availability": "observed",
+      "$runtimeType": "undefined",
+      "value": null
+    },
+    "literalMarker": "[REDACTED]",
+    "nullValue": null
+  }
+}

@@ -1,0 +1,6 @@
+node_modules
+dist
+AGENTS.md
+package-lock.json
+.errorcore-evidence
+.benchmark
