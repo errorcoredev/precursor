@@ -14,12 +14,14 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "build:dev": "tsc -p tsconfig.dev.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
-    "test": "npm run build && vitest run",
+    "test": "npm run build:dev && vitest run",
     "example": "npm run build && node dist/examples/investigate.js",
-    "benchmark": "npm run build && node dist/benchmarks/run.js"
+    "capture": "npm run build && node dist/examples/capture-file.js",
+    "benchmark": "npm run build:dev && node dist/benchmarks/run.js"
   },
   "dependencies": {
     "stream-json": "3.8.0"

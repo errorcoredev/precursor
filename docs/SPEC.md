@@ -4,6 +4,8 @@ Status: implemented and verified; actual command results are recorded in the imp
 
 ## 1. Scope and invariants
 
+Repository delivery separates public library/demo files from local verification assets. `tests/`, `benchmarks/`, their local configuration, `localTests/`, capture storage and generated output are ignored and removed from Git tracking while retained on disk. The public build compiles only `src/` and `examples/`; the runnable demo uses a synthetic fixture under `examples/` so a fresh checkout remains runnable. Local tests/benchmarks use a separate development TypeScript configuration. Historical benchmark measurements remain documented, while their raw artifacts are local.
+
 Node.js 24, strict TypeScript, ESM, in-process library. Preserve received binary JSON bytes exactly, with no additional redaction. Compile deterministically into immutable source evidence, a sparse navigable index and source-supported graph. No inference, root-cause determination, authentication service or distributed infrastructure. A debugging session starts with `getOverview`.
 
 ## 2. Architecture
@@ -17,6 +19,8 @@ Each capture has a random UUID. A node ID is `<capture UUID>:<structural byte of
 Provenance identifies capture, node and origin: `direct_observation`, `upstream_metadata`, or `derived_structure`. Nodes have separate `provenance` and `structureProvenance`; availability and graph records carry upstream provenance. Large keys/paths/metadata are represented by bounded previews, original lengths and resolvable node references. Structural previews are 128 units; semantic previews are 256 units. String storage uses UTF-16LE to preserve lone surrogates. Numbers retain their exact ASCII lexemes; JavaScript numeric conversion is never required. JSON null is observed.
 
 ## 4. Public contracts
+
+The file-runner command `npm run capture -- <file.json> [--adapter=<adapter ID>]` accepts a caller-selected input file and defaults to `generic-json`. It streams that file into `.errorcore-evidence` relative to the working directory, calls `getOverview` first, then prints one root inspection page and one evidence result (the first returned child, or the root for primitives/empty containers). Each API response retains its normal bounds and continuation metadata. The input file is never modified. CLI stdout is intentional evidence output; failures print fixed codes without raw source excerpts. The illustrative graph adapter requires explicit selection with `--adapter=errorcore-example-v1`.
 
 `createEvidenceEngine({storage, adapters?, limits?})` exposes `compileRuntimeState(input, options?)`, `getOverview(captureId, options?)`, `inspectNode(nodeId, options?)`, and `getEvidence(nodeId, options?)`. Top-level operations lazily use `.errorcore-evidence` in the current directory. Storage is a trusted configured dependency; callers cannot pass paths to retrieval.
 

@@ -11,17 +11,34 @@ npm ci
 npm run build
 npm run typecheck
 npm run lint
-npm test
 npm run example
-npm run benchmark -- --size=10mb
-npm run benchmark -- --size=100mb
-# Optional; not run during delivery:
-npm run benchmark -- --size=1gb
+npm run capture -- "path/to/test.json"
 ```
 
-Dependencies and the lockfile are pinned. npm scripts use the project-local Node 24.22.2 binary. On this Windows PowerShell installation, use `npm.cmd run benchmark -- --size=100mb` to preserve argument forwarding; the host's `npm` PowerShell wrapper consumes `--size`.
+Dependencies and the lockfile are pinned. npm scripts use the project-local Node 24.22.2 binary. On Windows PowerShell, use `npm.cmd` when forwarding options after `--`.
 
-The example prints an overview first, follows a failed operation into its snapshot, retrieves an observed exception message and explicit redaction metadata, demonstrates pagination and generic JSON, then retrieves evidence in a new Node process. It prints and retains a temporary store. Benchmarks retain artifacts under ignored `.benchmark/` directories and publish measurements in `benchmarks/results/`.
+The example uses the public synthetic capture at `examples/runtime.json`. It prints an overview first, follows a failed operation into its snapshot, retrieves an observed exception message and explicit redaction metadata, demonstrates pagination and generic JSON, then retrieves evidence in a new Node process. It prints and retains a temporary store.
+
+To run your own file, for example `tests/fixtures/test.json`, use PowerShell:
+
+```powershell
+cd D:\precursor
+npm.cmd run capture -- tests/fixtures/test.json
+# Or a file in the project root:
+npm.cmd run capture -- test.json
+# Save the terminal output:
+npm.cmd run capture -- tests/fixtures/test.json > test-output.txt
+```
+
+The runner stores the capture in `.errorcore-evidence` and prints the manifest, overview, up to 10 root children, and evidence for the first returned child (or the root for primitive/empty input). Each response preserves its pagination metadata. It defaults to the generic JSON adapter, which reports execution metadata as unavailable. For a file using the documented illustrative schema, select it explicitly:
+
+```powershell
+npm.cmd run capture -- examples/runtime.json --adapter=errorcore-example-v1
+```
+
+Run `npm.cmd run capture -- --help` for usage. Use a quoted path for filenames containing spaces. Invalid input or a missing file prints a fixed error code and exits unsuccessfully. The runner does not modify the input file.
+
+Keep private capture files under `localTests/` or `tests/`, or choose a path outside this repository. These local directories and the root `test.json` are ignored by Git.
 
 ## Use
 
@@ -35,7 +52,7 @@ import {
 const storage = new LocalEvidenceStorage('./evidence-store');
 const engine = createEvidenceEngine({ storage });
 const manifest = await engine.compileRuntimeState(
-  createReadStream('tests/fixtures/runtime.json'),
+  createReadStream('examples/runtime.json'),
   { adapterId: 'errorcore-example-v1' },
 );
 
@@ -103,7 +120,9 @@ Process-crash visibility is tested. Portable power-loss durability is not claime
 
 The delivery suite contains 41 tests across structural correctness, evidence semantics, malformed input, resource limits, exact bytes/hash, authenticated cursors, backpressure, immutable-file checks, graph pagination, restart, and real process-kill publication tests. Build, typecheck, lint, tests and the executable example have been run. The runtime dependency audit has zero findings; full development-tool audit findings are recorded in the implementation plan.
 
-Actual 10 MiB and 100 MiB measurements, environment, storage sizes and cold/warm timings are in [benchmarks/RESULTS.md](benchmarks/RESULTS.md), with raw JSON alongside it. The 1 GiB command is implemented but has not been run. These are synthetic workload measurements, not production capacity claims.
+The measured 10 MiB capture compiled in 0.516 s at 82.81 MiB peak RSS; the 100 MiB capture compiled in 3.378 s at 178.72 MiB peak RSS, with an 8.63 ms median warm overview. These historical synthetic measurements are documented in [the implementation plan](docs/IMPLEMENTATION_PLAN.md). The optional 1 GiB run has not been executed. No core parser/storage code changed for the file runner.
+
+Tests, benchmark code/data, `localTests/`, local test configuration, generated output, and `.errorcore-evidence/` are ignored by Git and kept on the local machine. The public checkout includes the library, file runner, synthetic demo and documentation. The existing local verification suite can be run with `npm test`, and local benchmarks with `npm.cmd run benchmark -- --size=10mb` (or `100mb`/`1gb`); those commands require the ignored local files and `tsconfig.dev.json`. They are not shipped with a fresh public checkout. `.gitignore` does not remove files from earlier Git history.
 
 For production integration, implement a versioned `CaptureSchemaAdapter` using the bounded structural-event contract in [src/types/index.ts](src/types/index.ts), register it through `createEvidenceEngine({ storage, adapters: [adapter] })`, and add real fixtures. The adapter must map explicit source IDs, relationships, failures, availability and runtime encodings without assembling arbitrary runtime objects. Source IDs above 1,024 code units remain referenceable but unresolved in the illustrative adapter. Ambiguous source IDs never merge operations.
 

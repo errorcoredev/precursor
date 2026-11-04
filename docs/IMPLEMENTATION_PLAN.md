@@ -16,6 +16,19 @@
 
 ## Decisions and deviations
 
+### Follow-up: run a caller-selected JSON file
+
+- [x] Specify a generic file runner before changing implementation.
+- [x] Add `npm run capture -- <file.json>` with explicit optional adapter selection and bounded terminal output.
+- [x] Document the `test.json` workflow and verify a separate fixture, primitive/empty input, illustrative graph input, and invalid/missing files.
+- [x] Run relevant checks and record results. Core storage/parser benchmarks are unchanged by this CLI-only addition.
+- [x] Ignore and untrack local tests/benchmarks while preserving their files; isolate their build configuration from the public build.
+- [x] Verify the public build/example without local verification assets, then commit public-facing changes only.
+
+The local file-runner smoke check passed 12 cases, including quoted paths, primitive/empty inputs, explicit example-adapter selection and safe errors. The user's `tests/fixtures/test.json` compiled successfully (31,656 bytes, 839 indexed structural values) in generic mode; output is local at `.benchmark/test-file-output.txt`. The 41 existing tests passed after adding the runner. Test and benchmark sources/results are retained locally but removed from current Git tracking; earlier commit history is preserved.
+
+Final verification passed: `npm test` (41 tests), `npm run lint`, `npm run typecheck`, 12 CLI smoke checks, and a separate checkout of the staged public files with no tests/benchmarks/local configurations. That checkout built successfully, ran the demo including fresh-process retrieval, and compiled the chosen external `test.json`. Git ignore checks confirm that local inputs, benchmark results, local configurations and terminal output are excluded. Verification files remain on disk.
+
 - Host default Node is 22.14.0; verification uses the local pinned Node 24.22.2 binary without changing the machine-wide installation.
 - SQLite is Node's built-in `node:sqlite`; semantic evidence is separate from mutable lazy-index caches.
 - stream-json 3.8.0 is pinned, using `parser.asStream` plus `verifier.asStream`, both with packing disabled where applicable. Initial older tool pins were replaced before delivery; the runtime dependency audit reports zero vulnerabilities.

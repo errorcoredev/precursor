@@ -4,3 +4,12 @@ dist/
 .errorcore-evidence/
 .benchmark/
 coverage/
+localTests
+
+# Local verification code, capture inputs and benchmark artifacts
+/tests/
+/benchmarks/
+/tsconfig.dev.json
+/vitest.config.ts
+/test.json
+/*-output.txt

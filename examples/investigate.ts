@@ -1,7 +1,7 @@
 import { createReadStream } from 'node:fs';
 import { mkdtemp } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Readable } from 'node:stream';
 import { spawnSync } from 'node:child_process';
@@ -41,7 +41,9 @@ if (process.argv[2] === '--reopen') {
     storage: new LocalEvidenceStorage(directory),
   });
   const manifest = await engine.compileRuntimeState(
-    createReadStream(resolve('tests/fixtures/runtime.json')),
+    createReadStream(
+      fileURLToPath(new URL('../../examples/runtime.json', import.meta.url)),
+    ),
     { adapterId: 'errorcore-example-v1' },
   );
   const overview = await engine.getOverview(manifest.captureId); // Always the first debugging call.
