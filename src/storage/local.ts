@@ -123,12 +123,13 @@ export class LocalEvidenceStorage implements EvidenceStorage {
   async verify(id: string): Promise<{ valid: true }> {
     try {
       const files = await this.open(id);
-      for (const [path, expected] of [
+      const checksums: readonly (readonly [string, string])[] = [
         [files.source, files.metadata.source.sha256],
         [files.structure, files.metadata.structure.sha256],
         [files.database, files.metadata.database.sha256],
-      ]) {
-        if ((await hashFile(path!)) !== expected) fail('INTEGRITY_ERROR');
+      ];
+      for (const [path, expected] of checksums) {
+        if ((await hashFile(path)) !== expected) fail('INTEGRITY_ERROR');
       }
       return { valid: true };
     } catch (error) {

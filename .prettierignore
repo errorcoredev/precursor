@@ -4,8 +4,8 @@ AGENTS.md
 package-lock.json
 .errorcore-evidence
 .benchmark
-tests
-benchmarks
 localTests
-tsconfig.dev.json
-vitest.config.ts
+test.json
+tests/fixtures/test.json
+benchmarks/results
+evidence-store

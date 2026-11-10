@@ -1,7 +1,16 @@
 {
   "name": "errorcore-runtime-evidence",
   "version": "0.1.0",
+  "description": "Streaming runtime evidence storage, hierarchical indexing and source-grounded execution graphs for Node.js.",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/errorcoredev/precursor.git"
+  },
+  "homepage": "https://github.com/errorcoredev/precursor#readme",
+  "bugs": {
+    "url": "https://github.com/errorcoredev/precursor/issues"
+  },
   "type": "module",
   "engines": {
     "node": ">=24 <25"
@@ -15,10 +24,11 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "build:dev": "tsc -p tsconfig.dev.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "typecheck": "tsc -p tsconfig.dev.json --noEmit",
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
     "test": "npm run build:dev && vitest run",
+    "check": "npm run typecheck && npm run lint && npm test && npm run example",
     "example": "npm run build && node dist/examples/investigate.js",
     "capture": "npm run build && node dist/examples/capture-file.js",
     "benchmark": "npm run build:dev && node dist/benchmarks/run.js"

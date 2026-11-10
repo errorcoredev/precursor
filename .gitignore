@@ -1,15 +1,28 @@
-AGENTS.md
+# Dependencies and build artifacts
 node_modules/
 dist/
-.errorcore-evidence/
-.benchmark/
 coverage/
-localTests
+*.tsbuildinfo
 
-# Local verification code, capture inputs and benchmark artifacts
-/tests/
-/benchmarks/
-/tsconfig.dev.json
-/vitest.config.ts
+# Local configuration and private capture inputs
+AGENTS.md
+.env
+.env.*
+!.env.example
+/localTests/
 /test.json
+/tests/fixtures/test.json
 /*-output.txt
+
+# Generated evidence and benchmark artifacts
+/.errorcore-evidence/
+/.benchmark/
+/evidence-store/
+/benchmarks/results/
+
+# Editor and operating system files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log

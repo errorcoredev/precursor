@@ -29,10 +29,14 @@ import type {
 } from './types/index.js';
 
 export interface EngineOptions {
+  /** Trusted storage shared by compilation and retrieval. */
   storage: EvidenceStorage;
+  /** Additional adapters. Built-in adapter IDs cannot be replaced. */
   adapters?: CaptureSchemaAdapter[];
+  /** Engine defaults, constrained by the hard ceilings in limits.ts. */
   limits?: Partial<Limits>;
 }
+/** Creates an isolated API instance over a persistent evidence store. */
 export function createEvidenceEngine(options: EngineOptions): EvidenceEngine {
   optionsObject(options);
   const limits = limitsFor(options.limits);
@@ -110,14 +114,18 @@ function engine(): EvidenceEngine {
     storage: new LocalEvidenceStorage(resolve('.errorcore-evidence')),
   }));
 }
+/** Compiles a binary JSON stream using the default working-directory store. */
 export const compileRuntimeState = (
   input: Readable,
   options?: CompileOptions,
 ) => engine().compileRuntimeState(input, options);
+/** Returns the initial bounded graph projection and recorded failure locations. */
 export const getOverview = (captureId: string, options?: OverviewOptions) =>
   engine().getOverview(captureId, options);
+/** Returns node structure and a bounded page of child references. */
 export const inspectNode = (nodeId: string, options?: InspectOptions) =>
   engine().inspectNode(nodeId, options);
+/** Returns observed evidence, a bounded slice, or explicit availability metadata. */
 export const getEvidence = (nodeId: string, options?: EvidenceOptions) =>
   engine().getEvidence(nodeId, options);
 export { LocalEvidenceStorage, genericJsonAdapter, exampleErrorcoreAdapter };

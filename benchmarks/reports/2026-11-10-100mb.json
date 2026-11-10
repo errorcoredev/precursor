@@ -1,0 +1,99 @@
+{
+  "measuredAt": "2026-11-10T14:07:41.540Z",
+  "requestedSize": "100mb",
+  "generated": {
+    "bytes": 104857600,
+    "operations": 11720
+  },
+  "environment": {
+    "node": "v24.22.2",
+    "platform": "win32",
+    "release": "10.0.26300",
+    "arch": "x64",
+    "cpu": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
+    "logicalCpus": 16,
+    "totalMemoryBytes": 25597108224
+  },
+  "compilation": {
+    "manifest": {
+      "formatVersion": 1,
+      "captureId": "c6ae2265-2982-44e4-98dc-0fb8b8e9963f",
+      "adapterId": "errorcore-example-v1",
+      "createdAt": "2026-11-10T14:07:41.030Z",
+      "rootEvidenceId": "c6ae2265-2982-44e4-98dc-0fb8b8e9963f:16",
+      "source": {
+        "file": "source.json",
+        "bytes": 104857600,
+        "sha256": "b1259ceb577efe9341fbb3c9e21a651058bd888a0733265153cbbef36b58573a"
+      },
+      "structure": {
+        "file": "structure.bin",
+        "bytes": 238558460,
+        "sha256": "273e5c6abc621914fc3cefdf29b833bd2a9f0be4610fccbced9a839ffc36997c"
+      },
+      "database": {
+        "file": "evidence.sqlite",
+        "bytes": 25104384,
+        "sha256": "d6cd0ce2d84f33f8fb15012f19de0b29ac58d7ffddd3b065e33c1ef5304ceb98"
+      },
+      "counts": {
+        "nodes": 503966,
+        "operations": 11720,
+        "relationships": 11719,
+        "failures": 1
+      },
+      "availabilityCounts": {
+        "redacted": 11720
+      },
+      "captureComplete": true,
+      "graphCompleteness": "partial",
+      "unresolvedGraphEndpoints": 0,
+      "metrics": {
+        "durationMs": 3420.5971,
+        "sourceBytes": 104857600,
+        "structuralBytes": 238558460,
+        "nodeCount": 503966,
+        "maxDepth": 6,
+        "peakRssBytes": 161075200,
+        "peakHeapBytes": 26801768
+      }
+    },
+    "wallMs": 3427.3944,
+    "peakRssBytes": 161075200,
+    "sqliteBytes": 25104384,
+    "manifestBytes": 962
+  },
+  "retrieval": {
+    "coldOverviewMs": 37.74040000000001,
+    "uncachedInspectMs": 13.632499999999993,
+    "coldEvidenceMs": 3.4990999999999985,
+    "warmOverview": {
+      "medianMs": 8.907999999999959,
+      "p95Ms": 9.47290000000001,
+      "samples": 20
+    },
+    "cachedInspect": {
+      "medianMs": 3.668299999999988,
+      "p95Ms": 4.148899999999998,
+      "samples": 20
+    },
+    "cachedEvidence": {
+      "medianMs": 2.8755000000000166,
+      "p95Ms": 3.2742999999999824,
+      "samples": 20
+    },
+    "cacheBytes": 16384,
+    "overviewBytes": 55522
+  },
+  "overhead": {
+    "sourceBytes": 104857600,
+    "structuralBytes": 238558460,
+    "semanticIndexBytes": 25104384,
+    "storageRatio": 3.5144939994812012
+  },
+  "notes": [
+    "Cold means a fresh process with no lazy index, not flushed OS disk caches.",
+    "Peak RSS is process.resourceUsage().maxRSS; heap is sampled once per input segment.",
+    "Synthetic runtime snapshots; production-schema integration remains outstanding."
+  ]
+}
